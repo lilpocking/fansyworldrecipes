@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рецепты Напитков</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f9f5f0 0%, #e8e0d5 100%);
+            color: #3a2a1a;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #d4c1a8;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #8B4513, #A0522D, #8B4513);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b5542;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .recipe-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0d6c9;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(to right, #f5f0e6, #e8e0d5);
+            border-bottom: 2px solid #d4c1a8;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1.75rem;
+            margin-left: 12px;
+            color: #5d4037;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 22px;
+        }
+
+        .recipe-detail {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e8e0d5;
+        }
+
+        .recipe-detail:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: #8B4513;
+            margin-right: 8px;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .alcohol-free {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .high-alcohol {
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        .aging-required {
+            background: linear-gradient(to right, #f9f5f0, #f0e6d6);
+            border-left: 4px solid #a67c52;
+            padding-left: 12px;
+        }
+
+        .distillation-required {
+            background: linear-gradient(to right, #f9f5f0, #e8e0d5);
+            border-left: 4px solid #5d4037;
+            padding-left: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: #6b5542;
+            font-size: 0.95rem;
+            border-top: 2px solid #d4c1a8;
+        }
+
+        @media (max-width: 768px) {
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .card-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .card-header {
+                padding: 15px;
+            }
+            
+            .card-header h2 {
+                font-size: 1.4rem;
+                margin-left: 8px;
+            }
+            
+            .card-body {
+                padding: 18px;
+            }
+            
+            .detail-label {
+                min-width: 120px;
+                display: block;
+                margin-bottom: 4px;
+            }
+        }
+
+        .category-beer { border-top: 4px solid #d4a76a; }
+        .category-wine { border-top: 4px solid #a52a2a; }
+        .category-mead { border-top: 4px solid #e6be8a; }
+        .category-cider { border-top: 4px solid #8b5a2b; }
+        .category-whiskey { border-top: 4px solid #7a4f2c; }
+        .category-rum { border-top: 4px solid #8b4513; }
+        .category-vodka { border-top: 4px solid #c0c0c0; }
+        .category-gin { border-top: 4px solid #4a7b6f; }
+        .category-tequila { border-top: 4px solid #b8860b; }
+        .category-absinthe { border-top: 4px solid #4caf50; }
+        .category-soup { border-top: 4px solid #a0522d; }
+        .category-coffee { border-top: 4px solid #6f4e37; }
+        .category-eggnog { border-top: 4px solid #e0c9a6; }
+        .category-special { border-top: 4px solid #ffd700; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Книга Рецептов Напитков</h1>
+            <p class="subtitle">Сборник традиционных и особых рецептов для мастеров пивоварения и дистилляции</p>
+        </header>
+
+        <div class="recipes-grid">
+            <!-- Пшеничное пиво -->
+            <div class="recipe-card category-beer">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍺</span>
+                    <h2>Пшеничное пиво (wheatbeer)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 3 пшеницы
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 8 минут
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 2 года в берёзовой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 5%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Пиво -->
+            <div class="recipe-card category-beer">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍺</span>
+                    <h2>Пиво (beer)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 6 пшениц
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 8 минут
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 3 года в любой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 6%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Тёмное пиво -->
+            <div class="recipe-card category-beer">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍺</span>
+                    <h2>Тёмное пиво (darkbeer)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 6 пшениц
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 8 минут
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 8 лет в бочке из тёмного дуба
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 7%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Красное вино -->
+            <div class="recipe-card category-wine">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍷</span>
+                    <h2>Красное вино (wine)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 5 сладких ягод
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 5 минут
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 20 лет в любой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 8%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Мёд -->
+            <div class="recipe-card category-mead">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍯</span>
+                    <h2>Мёд (mead)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 6 сахарного тростника
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 3 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 4 года в дубовой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 9%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Яблочный мёд -->
+            <div class="recipe-card category-mead">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍯</span>
+                    <h2>Яблочный мёд (ap_mead)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 6 сахарного тростника + 2 яблока
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 4 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 4 года в дубовой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 11%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Яблочный сидр -->
+            <div class="recipe-card category-cider">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍏</span>
+                    <h2>Яблочный сидр (cidre)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 14 яблок
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 7 минут
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 3 года в любой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 7%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Яблочный ликёр -->
+            <div class="recipe-card category-cider">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍏</span>
+                    <h2>Яблочный ликёр (apple_liquor)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 12 яблок
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 16 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 3 цикла
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 6 лет в бочке из акации
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 14%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Виски -->
+            <div class="recipe-card category-whiskey">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🥃</span>
+                    <h2>Виски (whiskey)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 10 пшениц
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 10 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 2 цикла по 50 секунд
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 18 лет в еловой бочке
+                    </div>
+                    <div class="recipe-detail high-alcohol">
+                        <span class="detail-label">Крепость:</span> 26%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ром -->
+            <div class="recipe-card category-rum">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🥃</span>
+                    <h2>Ром (rum)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 18 сахарного тростника
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 6 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 2 цикла по 30 секунд
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 14 лет в дубовой бочке
+                    </div>
+                    <div class="recipe-detail high-alcohol">
+                        <span class="detail-label">Крепость:</span> 30%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Водка -->
+            <div class="recipe-card category-vodka">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍶</span>
+                    <h2>Водка (vodka)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 10 картофелин
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 15 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 3 цикла
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 20%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Грибная водка -->
+            <div class="recipe-card category-vodka">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍄</span>
+                    <h2>Грибная водка (shroom_vodka)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 10 картофелин + 3 красных гриба + 3 коричневых гриба
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 18 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 5 циклов
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 18%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Джин -->
+            <div class="recipe-card category-gin">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍸</span>
+                    <h2>Джин (gin)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 9 пшеницы + 6 синих цветов + 1 яблоко
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 6 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 2 цикла
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 20%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Текила -->
+            <div class="recipe-card category-tequila">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🌵</span>
+                    <h2>Текила (tequila)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 8 кактусов
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 15 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 2 цикла
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 12 лет в берёзовой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 20%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Абсент -->
+            <div class="recipe-card category-absinthe">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍃</span>
+                    <h2>Абсент (absinthe)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 15 короткой травы
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 3 минуты
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 6 циклов по 80 секунд
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail high-alcohol">
+                        <span class="detail-label">Крепость:</span> 42%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Зелёный абсент -->
+            <div class="recipe-card category-absinthe">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍃</span>
+                    <h2>Зелёный абсент (gr_absinthe)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 17 короткой травы + 2 ядовитых картофеля
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 5 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 6 циклов по 85 секунд
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail high-alcohol">
+                        <span class="detail-label">Крепость:</span> 46%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Картофельный суп -->
+            <div class="recipe-card category-soup">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🥣</span>
+                    <h2>Картофельный суп (potato_soup)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 5 картофелин + 3 короткой травы
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 3 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail alcohol-free">
+                        <span class="detail-label">Крепость:</span> безалкогольный
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кофе -->
+            <div class="recipe-card category-coffee">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">☕️</span>
+                    <h2>Кофе (coffee)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 12 какао-бобов + 2 ведра молока
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 2 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail alcohol-free">
+                        <span class="detail-label">Крепость:</span> снижает опьянение (-6%)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Эггног -->
+            <div class="recipe-card category-eggnog">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🍳</span>
+                    <h2>Эггног (eggnog)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 5 яиц + 2 сахара + 1 ведро молока
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 2 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> 3 года в любой бочке
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 10%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Золотая водка -->
+            <div class="recipe-card category-special">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🥇</span>
+                    <h2>Золотая водка (g_vodka)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 10 картофелин + 2 золотых самородка
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 18 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 3 цикла
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> 20%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Огненный виски -->
+            <div class="recipe-card category-whiskey">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🔥</span>
+                    <h2>Огненный виски (fire_whiskey)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 10 пшеницы + 2 порошка огненного стержня
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 12 минут
+                    </div>
+                    <div class="recipe-detail distillation-required">
+                        <span class="detail-label">Дистилляция:</span> 3 цикла по 55 секунд
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> 18 лет в еловой бочке
+                    </div>
+                    <div class="recipe-detail high-alcohol">
+                        <span class="detail-label">Крепость:</span> 28%
+                    </div>
+                </div>
+            </div>
+
+            <!-- Горячий шоколад -->
+            <div class="recipe-card category-coffee">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">☕️</span>
+                    <h2>Горячий шоколад (hot_choc)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 3 печенья
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 2 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail alcohol-free">
+                        <span class="detail-label">Крепость:</span> безалкогольный
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кофе со льдом -->
+            <div class="recipe-card category-coffee">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">🧊</span>
+                    <h2>Кофе со льдом (iced_coffee)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 8 печений + 4 снежка + 1 ведро молока
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 1 минута
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail alcohol-free">
+                        <span class="detail-label">Крепость:</span> снижает опьянение (-8%)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Книга рецептов напитков | Составлено с любовью к мастерству пивоварения и дистилляции</p>
+            <p>© 2026 Все права защищены</p>
+        </footer>
+    </div>
+</body>
+</html>
+
