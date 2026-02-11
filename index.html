@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             letter-spacing: -0.5px;
         }
 
@@ -143,11 +144,11 @@
             .recipes-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             h1 {
                 font-size: 2.8rem;
             }
-            
+
             .card-header h2 {
                 font-size: 1.5rem;
             }
@@ -157,24 +158,24 @@
             body {
                 padding: 15px;
             }
-            
+
             h1 {
                 font-size: 2.3rem;
             }
-            
+
             .card-header {
                 padding: 15px;
             }
-            
+
             .card-header h2 {
                 font-size: 1.4rem;
                 margin-left: 8px;
             }
-            
+
             .card-body {
                 padding: 18px;
             }
-            
+
             .detail-label {
                 min-width: 120px;
                 display: block;
@@ -182,22 +183,64 @@
             }
         }
 
-        .category-beer { border-top: 4px solid #d4a76a; }
-        .category-wine { border-top: 4px solid #a52a2a; }
-        .category-mead { border-top: 4px solid #e6be8a; }
-        .category-cider { border-top: 4px solid #8b5a2b; }
-        .category-whiskey { border-top: 4px solid #7a4f2c; }
-        .category-rum { border-top: 4px solid #8b4513; }
-        .category-vodka { border-top: 4px solid #c0c0c0; }
-        .category-gin { border-top: 4px solid #4a7b6f; }
-        .category-tequila { border-top: 4px solid #b8860b; }
-        .category-absinthe { border-top: 4px solid #4caf50; }
-        .category-soup { border-top: 4px solid #a0522d; }
-        .category-coffee { border-top: 4px solid #6f4e37; }
-        .category-eggnog { border-top: 4px solid #e0c9a6; }
-        .category-special { border-top: 4px solid #ffd700; }
+        .category-beer {
+            border-top: 4px solid #d4a76a;
+        }
+
+        .category-wine {
+            border-top: 4px solid #a52a2a;
+        }
+
+        .category-mead {
+            border-top: 4px solid #e6be8a;
+        }
+
+        .category-cider {
+            border-top: 4px solid #8b5a2b;
+        }
+
+        .category-whiskey {
+            border-top: 4px solid #7a4f2c;
+        }
+
+        .category-rum {
+            border-top: 4px solid #8b4513;
+        }
+
+        .category-vodka {
+            border-top: 4px solid #c0c0c0;
+        }
+
+        .category-gin {
+            border-top: 4px solid #4a7b6f;
+        }
+
+        .category-tequila {
+            border-top: 4px solid #b8860b;
+        }
+
+        .category-absinthe {
+            border-top: 4px solid #4caf50;
+        }
+
+        .category-soup {
+            border-top: 4px solid #a0522d;
+        }
+
+        .category-coffee {
+            border-top: 4px solid #6f4e37;
+        }
+
+        .category-eggnog {
+            border-top: 4px solid #e0c9a6;
+        }
+
+        .category-special {
+            border-top: 4px solid #ffd700;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -206,6 +249,32 @@
         </header>
 
         <div class="recipes-grid">
+
+            <!-- Чай -->
+            <div class="recipe-card category-beer">
+                <div class="card-header">
+                    <span style="font-size: 2.2rem;">☕</span>
+                    <h2>Чай (tea)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="recipe-detail">
+                        <span class="detail-label">Ингредиенты:</span> 5 короткой травы + 2 тростника + 1 светящаяся ягода
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Время приготовления:</span> 4 минуты
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Дистилляция:</span> не нужна
+                    </div>
+                    <div class="recipe-detail aging-required">
+                        <span class="detail-label">Выдержка:</span> не требуется
+                    </div>
+                    <div class="recipe-detail">
+                        <span class="detail-label">Крепость:</span> -5%
+                    </div>
+                </div>
+            </div>
+
             <!-- Пшеничное пиво -->
             <div class="recipe-card category-beer">
                 <div class="card-header">
@@ -489,7 +558,8 @@
                 </div>
                 <div class="card-body">
                     <div class="recipe-detail">
-                        <span class="detail-label">Ингредиенты:</span> 10 картофелин + 3 красных гриба + 3 коричневых гриба
+                        <span class="detail-label">Ингредиенты:</span> 10 картофелин + 3 красных гриба + 3 коричневых
+                        гриба
                     </div>
                     <div class="recipe-detail">
                         <span class="detail-label">Время приготовления:</span> 18 минут
@@ -785,5 +855,5 @@
         </footer>
     </div>
 </body>
-</html>
 
+</html>
